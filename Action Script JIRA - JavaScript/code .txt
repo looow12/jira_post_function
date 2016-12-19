@@ -1,0 +1,34 @@
+//Recupere l'issue parent
+	def issueManager = ComponentAccessor.getIssueManager(); 
+
+//recupere la valeur de la custom field customFieldSrc dans sourceFieldVal
+	def sourceFieldVal = issueManager.getCustomFieldValue(customFieldSrc); 
+
+//Liste des sub task de l'issue + boucle dans liste
+	def  ListOfSubTask=issueManager.getSubTaskObjects(); 
+	for(subTask in ListOfSubTask) {}
+
+//Afficher valeur
+	log.warn();
+
+//Pour mettre a jour une field
+	DefaultIssueChangeHolder changeHolder = new DefaultIssueChangeHolder();
+	parentResolutionCF.updateValue(null, subTask, new ModifiedValue(old, new), changeHolder);  
+
+//Changer statut d'une issue
+	workflowTransitionUtil.setIssue(it);
+	workflowTransitionUtil.setUsername(currentUser);
+	workflowTransitionUtil.setAction ( )    // ID du statut que l'on veut    
+
+	workflowTransitionUtil.validate();
+	workflowTransitionUtil.progress();
+	
+//Action de l'issue    LE NOM
+	def workflow = ComponentAccessor.getWorkflowManager().getWorkflow(issue);
+	def wfd = workflow.getDescriptor();
+	def actionName = wfd.getAction(transientVars["actionId"] as int).getName();
+	log.warn(actionName);
+	
+//Action de l'issue    LE NUMERO
+	int ActionNumber = transientVars["actionId"];
+	log.warn(ActionNumber);

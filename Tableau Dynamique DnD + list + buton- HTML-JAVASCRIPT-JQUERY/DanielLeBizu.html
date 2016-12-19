@@ -1,0 +1,143 @@
+https://jsfiddle.net/Looow12/z19q8h14/38/
+
+<html>
+	<head>
+	
+		<title>DANIEL EST TOUJOURS UN BIZU</title>
+	    <style>
+		table th,
+		table td {
+		  width: 2000px;
+		  height: 30px;
+		  text-align: center;
+		  background: #ADD8E6;
+		}
+
+		table td {
+		  width: 2000px;
+		  height: 30px;
+		  text-align: center;
+		  background: #E0FFFF
+		}
+
+		.PageTitle {
+		  color: rgb(0, 0, 255);
+		  text-align: center;
+		  font-weight: bold;
+		  height: 50px;
+		  font-size: 20px;
+		}
+
+		</style>
+	</head>
+	
+	<table border="0" id="Table" class="grid">
+	  <thead>
+		<tr>
+		  <th> </th>
+		  <th>TEST STEP</th>
+		  <!--With COLSPAN you can define the number of colum that you want under the relative colum-->
+		  <th colspan="2">TEST DATA</th>
+		</tr>
+		<tr>
+		  <th> 
+			<input type="hidden" class="index" name="Number" id="Number" value="">
+		  </th>
+		  <th>
+			<select name="list" name="Step" id="idTestStep" onchange="get();" value="">
+			<datalist id="list">
+			  <option value=" "> </option>
+			  <option value="Daniel">Daniel</option>
+			  <option value="est">est</option>
+			  <option value="un">un</option>
+			  <option value="gros">gros</option>
+			  <option value="Bizu">Bizu</option>
+			</datalist>
+		  </select>
+		  <!-- you define the colum under data as a normal colum  -->
+		  <th> 
+			<input type="text" name="Data1" id="idTestData1" value="">
+		  </th>
+		  <th>
+			<input type="text" name="Data2" id="idTestData2" value="">
+		  </th>
+		  <th>
+			<input type="button" id="add_Lines" onClick="addLines()" value="Add" />
+		  </th>
+
+	  </thead>
+	  <tbody>
+		
+		
+
+	  </tbody>
+	</table>
+		
+	<script language='javascript' type="text/javascript">
+
+	//define the first number of line created
+	var nbRow = 1;
+	//number of line added
+	var rowCount = $('#Table tbody').length;
+
+	$(document).ready(function () {
+		$("#add_Lines").click(function() {
+		  AddLine();
+		  });
+			
+			$('tbody').click(function(){
+			DnD();
+		});
+		
+	});
+
+	function AddLine(){
+
+	//get the value enter in each text box in a different variable
+		var idTestData1 = document.getElementById('idTestData1').value;
+		var idTestData2 = document.getElementById('idTestData2').value;
+
+	//Condition, at least one value
+		if (idTestStep == '' & idTestData1 == '' & idTestData2 == '')
+		{
+		  alert("YOU HAVE TO FILL AT LEAST ONE VALUE.!");
+		} else {
+	//you create the new line with the variable of the value before, $('#Table tbody') is the place where you want add the line
+		  $('#Table tbody').append('<tr><td class="index">'+ nbRow +'</td><td>'+idTestStep.value+'</td><td>'+ idTestData1 +'</td><td>'+ idTestData2 +'</td></tr>');
+
+	//reset the text field
+		  document.getElementById("idTestStep").value = '';
+		  document.getElementById("idTestData1").value = '';
+		  document.getElementById("idTestData2").value = '';
+		  
+		  nbRow++;
+		  };
+	};
+
+	function DnD(){
+		var fixHelperModified = function(e, tr) {
+	//check the ligne tr clicked and clone it 
+	// some jquery function, if you want understand, google is your friend
+			var $originals = tr.children();
+			var $helper = tr.clone();
+			$helper.children().each(function(index) {
+				$(this).width($originals.eq(index).width())
+			});
+			return $helper;
+		},
+		
+	//update the number of the row, that is not relative to the nbrow number put before.    
+			updateIndex = function(e, ui) {
+				$('td.index', ui.item.parent()).each(function (i) {
+					$(this).html(i + 1);
+				});
+			};
+	//sortable allows the line to be moved
+		$("#Table tbody").sortable({
+			helper: fixHelperModified,
+			stop: updateIndex
+		}).disableSelection();
+	};
+	</script>
+
+</html>

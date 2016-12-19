@@ -1,0 +1,336 @@
+package com.rs2;
+
+
+import java.io.*;
+import org.jsoup.*;
+import java.io.IOException;
+import java.lang.*;
+import org.jsoup.nodes.*;
+
+public class Main {
+    private static final String PATH = "C:\\Users\\laura.ferrier\\Desktop\\MAILS\\";
+
+    public static void main(String[] args){
+        Main myMain = new Main();
+
+        //subfiles is the list of emails in directory
+        File[] subfiles = myMain.getFileListFromPath(PATH);
+
+        for (int j = 0; j < subfiles.length; j++) {
+            System.out.println(subfiles[j].getName() + "\n\n\n");
+
+            String NameOfTheFile = subfiles[j].getName();
+            try {
+                String everything = myMain.getEmail(PATH + NameOfTheFile);
+                String comments = myMain.getComments(everything, NameOfTheFile);
+                System.out.println(comments);
+
+            }catch(IOException e){
+                System.err.println(e.getLocalizedMessage());
+            }
+
+        }
+    }
+
+    private File[] getFileListFromPath(String path){
+        File directory = new File(path);
+        File[] subfiles = directory.listFiles();
+        String message = "The depository '" + path + "' contains " + subfiles.length + " file" + (subfiles.length > 1 ? "s" : "");
+        //System.out.println(message);
+
+        return subfiles;
+    }
+
+    private String getEmail(String fullPath)throws IOException{
+
+        FileReader text = new FileReader(fullPath);
+        BufferedReader ToRead = new BufferedReader(text);
+
+        StringBuilder mail = new StringBuilder();
+        String line = ToRead.readLine();
+
+        while (line != null) {
+            mail.append(line);
+            mail.append(System.lineSeparator());
+            line = ToRead.readLine();
+        }
+        String everything = mail.toString();
+
+        return everything;
+    }
+
+    private String getComments(String everything, String NameOfTheFile){
+        Document doc = Jsoup.parseBodyFragment(everything);
+        int left = everything.indexOf("Comments");
+        int right = everything.indexOf("Defect Details");
+        String commentSection;
+
+        if (NameOfTheFile.contains("SOA")) {
+            String sub = everything.substring(left-99, right-99);
+            sub = sub.toUpperCase();
+            commentSection = sub;
+        }else{
+            String sub = everything.substring(left - 140, right - 140);
+            sub = sub.toUpperCase();
+            commentSection = sub;
+        }
+
+        return commentSection;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----------------------------------------------
+
+
+package com.rs2;
+
+
+import java.io.*;
+import org.jsoup.*;
+import java.io.IOException;
+import java.lang.*;
+import org.jsoup.nodes.*;
+import org.jsoup.select.Elements;
+
+public class Main {
+    private static final String PATH = "C:\\Users\\laura.ferrier\\Desktop\\MAILS\\";
+
+    public static void main(String[] args){
+        Main myMain = new Main();
+
+        //subfiles is the list of emails in directory
+        File[] subfiles = myMain.getFileListFromPath(PATH);
+
+
+        for (int j = 0; j < subfiles.length; j++) {
+            System.out.println(subfiles[j].getName() + "\n\n\n");
+
+            //String NameOfTheFile = subfiles[j].getName();
+            try {
+                String NameFile= subfiles[j].getName();
+                String everything = myMain.getEmail(PATH + NameFile);
+                //System.out.println(everything);
+                String comments = myMain.getComments(everything);
+                System.out.println(comments);
+
+            }catch(IOException e){
+                System.err.println(e.getLocalizedMessage());
+            }
+
+        }
+    }
+
+    /*private Element ReturnTable(Elements Tables, String Title) {
+        //Returning Description as null
+        Element foundTable = null;
+
+
+        for (int i = 0; i < Tables.size(); i++) {
+            Element table = Tables.get(i);
+            try {
+                Elements trElements = table.select("tbody").select("tr");
+                if (trElements.size() == 2) {
+                    //Title Table always has two rows
+                    String foundTitle = trElements.select("td").select("p").select("b").select("span").first().text();
+                    if (foundTitle.equals(Title)) {
+                        foundTable = Tables.get(i + 1);
+                    }
+                }
+            } catch (Exception e) {
+                System.err.println("ERROR FOUND IN ReturnTable");
+            }
+        }
+        if (foundTable == null) {
+            System.err.println("Returning a null at ReturnTable(Elements, String)");
+        }
+
+        return foundTable;
+    } */
+
+    private File[] getFileListFromPath(String path){
+        File directory = new File(path);
+        File[] subfiles = directory.listFiles();
+        String message = "The depository '" + path + "' contains " + subfiles.length + " file" + (subfiles.length > 1 ? "s" : "");
+        //System.out.println(message);
+
+        return subfiles;
+    }
+
+    private String getEmail(String fullPath)throws IOException{
+
+        FileReader text = new FileReader(fullPath);
+        BufferedReader ToRead = new BufferedReader(text);
+
+        StringBuilder mail = new StringBuilder();
+        String line = ToRead.readLine();
+
+        while (line != null) {
+            mail.append(line);
+            mail.append(System.lineSeparator());
+            line = ToRead.readLine();
+        }
+        String everything = mail.toString();
+        //System.out.println(everything);
+        return everything;
+    }
+
+    private String getComments(String everything){
+        Document doc = Jsoup.parseBodyFragment(everything);
+        //System.out.println(doc);
+        //Elements tables = doc.select("table");
+
+        //Element descriptionTable = ReturnTable(tables, "Description");
+        //Element commentTable = ReturnTable(tables, "Comments");
+
+        int left = everything.indexOf("Comments");
+        int right = everything.indexOf("Defect Details");
+        String commentSection;
+
+        if (everything.contains("SOA")) {
+            String sub = everything.substring(left-40, right-99);
+            sub = sub.toUpperCase();
+            commentSection = sub;
+        }else{
+            String sub = everything.substring(left - 140, right - 140);
+            sub = sub.toUpperCase();
+            commentSection = sub;
+        }
+
+        return commentSection;
+    }
+}
+
+
+
+------------------------------
+
+
+package com.rs2;
+
+
+import java.io.*;
+import org.jsoup.*;
+import java.io.IOException;
+import java.lang.*;
+import org.jsoup.nodes.*;
+
+public class Main {
+    private static final String PATH = "C:\\Users\\laura.ferrier\\Desktop\\MAILS\\";
+
+    public static void main(String[] args) throws IOException {
+        Main myMain = new Main();
+
+        //subfiles is the list of emails in directory
+        File[] subfiles = myMain.getFileListFromPath(PATH);
+
+
+        for(File file : subfiles) {
+            FileReader text = new FileReader(file);
+            BufferedReader ToRead = new BufferedReader(text);
+
+            StringBuilder mail = new StringBuilder();
+            String line = ToRead.readLine();
+
+            while (line != null) {
+                mail.append(line);
+                mail.append(System.lineSeparator());
+                line = ToRead.readLine();
+            }
+            String everything = mail.toString();
+            //System.out.println(everything);
+
+            //Document doc = Jsoup.parseBodyFragment(everything);
+            int left = everything.indexOf("Comments");
+            int right = everything.indexOf("Defect Details");
+
+            if (everything.contains("@font-face")) {
+                String sub = everything.substring(left - 99, right - 99);
+                sub = sub.toUpperCase();
+                String result = sub;
+                System.out.println("Result of the comment : \n" + "\n" + result);
+            }else{
+                String sub = everything.substring(left - 140, right - 28);
+                sub = sub.toUpperCase();
+                String result = sub;
+                System.out.println("Result of the comment : \n" + "\n" + result);
+        }
+
+
+        /*for (int j = 0; j < subfiles.length; j++) {
+            System.out.println(subfiles[j].getName());
+            String NameOfTheFile = subfiles[j].getName();
+
+            FileReader text = new FileReader(PATH + NameOfTheFile);
+            BufferedReader ToRead = new BufferedReader(text);
+
+            StringBuilder mail = new StringBuilder();
+            String line = ToRead.readLine();
+
+            while (line != null) {
+                mail.append(line);
+                mail.append(System.lineSeparator());
+                line = ToRead.readLine();
+            }
+            String everything = mail.toString();
+
+            Document doc = Jsoup.parseBodyFragment(everything);
+            int left = everything.indexOf("Comments");
+            int right = everything.indexOf("Defect Details");
+
+            if (NameOfTheFile.contains("SOA")) {
+                String sub = everything.substring(left - 99, right - 28);
+                sub = sub.toUpperCase();
+                String result = sub;
+                System.out.println("Result of the comment : \n" + "\n" + result);
+            }else{
+                String sub = everything.substring(left - 140, right - 28);
+                sub = sub.toUpperCase();
+                String result = sub;
+                System.out.println("Result of the comment : \n" + "\n" + result);
+            }
+        }
+    }*/
+        }
+    }
+    private File[] getFileListFromPath(String path){
+        File directory = new File(path);
+        File[] subfiles = directory.listFiles();
+        String message = "The depository '" + path + "' contains " + subfiles.length + " file" + (subfiles.length > 1 ? "s" : "");
+        System.out.println(message);
+
+        return subfiles;
+    }
+
+    private String getEmail(File file)throws IOException{
+        FileReader text = new FileReader(file);
+        BufferedReader ToRead = new BufferedReader(text);
+
+        StringBuilder mail = new StringBuilder();
+        String line = ToRead.readLine();
+
+        while (line != null) {
+            mail.append(line);
+            mail.append(System.lineSeparator());
+            line = ToRead.readLine();
+        }
+        String everything = mail.toString();
+        return everything;
+    }
+
+
+}
+
+
+
